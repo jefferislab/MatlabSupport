@@ -2,7 +2,7 @@ function [idx dst] = ksearch(ann, query, k, epsl, asm)
 % 
 % kNN search
 %   Usage:
-%     [idx dst] = ksearch(ann, query, k, asm, eps)
+%     [idx dst] = ksearch(ann, query, k, epsl, [asm])
 %
 % Inputs:
 %   ann - ann class object
@@ -11,7 +11,7 @@ function [idx dst] = ksearch(ann, query, k, epsl, asm)
 %                                    points are returned)
 %   epsl - epsilon search precision 
 %   asm - allow self match flag, if false points with dst = 0 are ignored 
-%         (defualt is true)
+%         (default is true)
 %
 if nargin == 4
     asm = true;
