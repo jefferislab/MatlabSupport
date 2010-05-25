@@ -3,7 +3,7 @@
 /* the gateway function */
 //la chiamata deve essere DeleteGLtree(Tree)
 
-void mexFunction( int nlhs,const mxArray *plhs[], 
+void mexFunction( int nlhs, mxArray *plhs[], 
         int nrhs, const mxArray *prhs[1]) {
     
     
