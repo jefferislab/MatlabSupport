@@ -13,8 +13,8 @@
 %    b) modify the paths to point to your Slicer3 installation, 
 %    c) and run this script in MATLAB
 %    d) (Be sure to comment out the Linux stuff below):
-mex nrrdLoadWithMetadata.c -I"c:/Program Files/Slicer3 3.2.2008-08-08/include" -L"c:/Program Files/Slicer3 3.2.2008-08-08/lib/TEEM-1.9/" -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu
-mex nrrdSaveWithMetadata.c -I"c:/Program Files/Slicer3 3.2.2008-08-08/include" -L"c:/Program Files/Slicer3 3.2.2008-08-08/lib/TEEM-1.9/" -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu
+% mex nrrdLoadWithMetadata.c -I"c:/Program Files/Slicer3 3.2.2008-08-08/include" -L"c:/Program Files/Slicer3 3.2.2008-08-08/lib/TEEM-1.9/" -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu
+% mex nrrdSaveWithMetadata.c -I"c:/Program Files/Slicer3 3.2.2008-08-08/include" -L"c:/Program Files/Slicer3 3.2.2008-08-08/lib/TEEM-1.9/" -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -30,5 +30,6 @@ mex nrrdSaveWithMetadata.c -I"c:/Program Files/Slicer3 3.2.2008-08-08/include" -
 %    b) modify the paths to point to your Slicer3 installation, 
 %    c) and run this script in MATLAB 
 %    d) (Be sure to comment out the Windows stuff above):
-% mex nrrdLoadWithMetadata.c -I/software/Slicer3-3.3-alpha-2008-08-01-linux-x86/include -L/software/Slicer3-3.3-alpha-2008-08-01-linux-x86/lib/TEEM-1.9/ -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu -lz -lm
-% mex nrrdSaveWithMetadata.c -I/software/Slicer3-3.3-alpha-2008-08-01-linux-x86/include -L/software/Slicer3-3.3-alpha-2008-08-01-linux-x86/lib/TEEM-1.9/ -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu -lz -lm
+% INCDIR='/usr/local/include'
+mex nrrdLoadWithMetadata.c -I/usr/local/include -L/usr/local/lib/teem/ -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu -lz -lm
+mex nrrdSaveWithMetadata.c -I/usr/local/include -L/usr/local/lib/teem/ -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu -lz -lm
