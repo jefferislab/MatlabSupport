@@ -142,9 +142,9 @@ end
                     metadata.Units{2} = char(tempData(4:end)');
                 elseif strfind(metadata.Note{noteIndex}.text, 'AXIS_4') == 1
                     % z axis
-                    axisType = sscanf(metadata.Note{noteIndex}.text(7:end), ' %d');
+                    tempData = sscanf(metadata.Note{noteIndex}.text(7:end), ' %d %g %g %s');
+                    axisType = tempData(1);
                     if axisType == AXT_D
-                        tempData = sscanf(metadata.Note{noteIndex}.text(7:end), ' %d %g %g %s');
                         metadata.Origin(3) = tempData(2);
                         metadata.Delta(3) = tempData(3);
                     end
