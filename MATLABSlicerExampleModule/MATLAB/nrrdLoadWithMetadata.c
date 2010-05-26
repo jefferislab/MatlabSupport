@@ -71,9 +71,21 @@ void mexFunction(int nlhs, mxArray *plhs[],
     mxArray *bvalue; double *bvalue_temp; int bvalue_size[1];
     mxArray *gradientdirections; double *gradientdirections_temp; int gradientdirections_size[1];
 
-    if (!(1 == nrhs && mxIsChar(prhs[0]))) {
-        sprintf(errBuff, "%s: requires one string argument (the name of the file)", me);
+    int loadData=1; /* load data by default */
+    if (nrhs>2 || nrhs<1 || !mxIsChar(prhs[0])) {
+        sprintf(errBuff, "%s: requires one string argument (the name of the file) and an optional flag indicating whether to load the data", me);
         mexErrMsgTxt(errBuff);
+    } else if (nrhs==2) {
+          /* The input must be a noncomplex scalar double.*/
+        mwSize mrows,ncols;
+        mrows = mxGetM(prhs[1]);
+        ncols = mxGetN(prhs[1]);
+        if( !mxIsDouble(prhs[1]) || mxIsComplex(prhs[1]) ||
+          !(mrows==1 && ncols==1) ) {
+            mexErrMsgTxt("Second input must be a noncomplex scalar double.");
+        }
+        double *secondArray=mxGetPr(prhs[1]);
+        loadData= (int) secondArray[0]>0.0;
     }
 
     mop = airMopNew();
@@ -135,7 +147,10 @@ void mexFunction(int nlhs, mxArray *plhs[],
     for (axIdx=0; axIdx<nrrd->dim; axIdx++) {
         sizeI[axIdx] = nrrd->axis[axIdx].size;
     }
-    data = mxCreateNumericArray( nrrd->dim, sizeI, mtype, mxREAL );
+    if(loadData)
+        data = mxCreateNumericArray( nrrd->dim, sizeI, mtype, mxREAL );
+    else /* make an empty 2d array to put in the data field */
+        data = mxCreateNumericMatrix (0, 0, mtype, mxREAL );
     nrrd->data = mxGetPr(data); 
     mxSetFieldByNumber( plhs[0], 0, 0, data );
     /** space **/
@@ -229,7 +244,7 @@ void mexFunction(int nlhs, mxArray *plhs[],
     }
 
     /* read second time, now loading data */
-    if (nrrdLoad(nrrd, filename, NULL)) {
+    if (loadData && nrrdLoad(nrrd, filename, NULL)) {
         errPtr = biffGetDone(NRRD);
         airMopAdd(mop, errPtr, airFree, airMopAlways);
         sprintf(errBuff, "%s: trouble reading NRRD:\n%s", me, errPtr);

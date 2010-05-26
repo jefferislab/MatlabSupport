@@ -1,9 +1,12 @@
-function matlab_nrrd_struct = nrrdLoadWithMetadata( nrrd_filename )
-% function matlab_nrrd_struct = nrrdLoadWithMetadata( nrrd_filename )
+function matlab_nrrd_struct = nrrdLoadWithMetadata( nrrd_filename , loadData )
+% function matlab_nrrd_struct = nrrdLoadWithMetadata( nrrd_filename , [loadData])
 %
 % This function loads a nrrd volume into MATLAB with the associated
-% metadata. Input is a string with the nrrd volume filename. Output
-% is a struct containing the data and the metadata.
+% metadata. It expects a string with the nrrd volume filename and
+% optionally a flag loadData which defaults to 1.
+% If loadData is 0 then only the metadata is returned.
+%
+% Output is a struct containing the data and the metadata.
 %
 % The struct obeys the following conventions:
 % - The fields in the struct are ordered as follows:
