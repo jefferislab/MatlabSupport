@@ -13,8 +13,8 @@ fid = fopen(filename, 'r');
     fseek(fid, 76, 'bof');
 
     % read data
-    data = zeros(info.Width, info.Height, info.NumImages, ['uint' sprintf('%0.0f', info.BitDepth)]);
+    data = zeros(info.Height, info.Width, info.NumImages, ['uint' sprintf('%0.0f', info.BitDepth)]);
     for x = 1:info.NumImages
-        data(:,:,x) = fliplr(fread(fid, [info.Width, info.Height], ['uint' sprintf('%0.0f', info.BitDepth)]));
+        data(:,:,x) = fread(fid, [info.Width, info.Height], ['uint' sprintf('%0.0f', info.BitDepth)])';
     end
 fclose(fid);
