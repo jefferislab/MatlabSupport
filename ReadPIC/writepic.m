@@ -44,13 +44,11 @@ fid = fopen(filename, 'w');
 	fwrite(fid, [tempFileName(1:min([end 32])); zeros(32 - length(tempFileName), 1)], 'char');
 	fwrite(fid, [0 7 12345 0 255 7 0], 'int16');
 	fwrite(fid, metadata.LensMagnification, 'int16');
-	fwrite(fid, metadata.LensFactor, 'int16');
+	fwrite(fid, metadata.LensFactor, 'float');
 	fwrite(fid, [0 0 0], 'int16');
 
 	% write image data
 	fwrite(fid, X, ['uint' sprintf('%0.0f', metadata.BitDepth)]);
-
-	fwrite(fid, 0, 'int16');
 
 	writeComment(fid, ['PIXEL_BIT_DEPTH = ' metadata.BitDepth])
 	writeComment(fid, 'PIC_FF_VERSION = 4.5')
