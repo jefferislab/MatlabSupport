@@ -4,8 +4,8 @@ function writepic(X, filename, metadata)
 % writepic(X, filename);
 
 if nargin < 3
-    metadata.Width = size(X, 1);
-    metadata.Height = size(X, 2);
+    metadata.Height = size(X, 1);
+    metadata.Width = size(X, 2);
     metadata.NumImages = size(X, 3);
     switch class(X)
         case 'uint8'
@@ -64,7 +64,7 @@ fid = fopen(filename, 'w');
 
     % without this the pic reading software that I have throws an
     % unexpected end of file error
-	fwrite(fid, zeros(640, 1), 'char');
+	%fwrite(fid, zeros(640, 1), 'char');
 
 fclose(fid);
 
