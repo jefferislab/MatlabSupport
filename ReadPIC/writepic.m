@@ -29,9 +29,9 @@ end
 fid = fopen(filename, 'w');
 
 	% write header data
-	fwrite(fid, metadata.Width, 'int16');
-	fwrite(fid, metadata.Height, 'int16');
-	fwrite(fid, metadata.NumImages, 'int16');
+	fwrite(fid, metadata.Width, 'int16',0,'l');
+	fwrite(fid, metadata.Height, 'int16',0,'l');
+	fwrite(fid, metadata.NumImages, 'int16',0,'l');
 
 	fwrite(fid, [0 255], 'int16');
 	fwrite(fid, -1, 'int32');
@@ -42,13 +42,13 @@ fid = fopen(filename, 'w');
     end
     tempFileName = filename(find(filename == '\', 1, 'last') + 1:end)';
 	fwrite(fid, [tempFileName(1:min([end 32])); zeros(32 - length(tempFileName), 1)], 'char');
-	fwrite(fid, [0 7 12345 0 255 7 0], 'int16');
-	fwrite(fid, metadata.LensMagnification, 'int16');
-	fwrite(fid, metadata.LensFactor, 'float');
-	fwrite(fid, [0 0 0], 'int16');
+	fwrite(fid, [0 7 12345 0 255 7 0], 'int16',0,'l');
+	fwrite(fid, metadata.LensMagnification, 'int16',0,'l');
+	fwrite(fid, metadata.LensFactor, 'float',0,'l');
+	fwrite(fid, [0 0 0], 'int16',0,'l');
 
 	% write image data
-	fwrite(fid, X, ['uint' sprintf('%0.0f', metadata.BitDepth)]);
+	fwrite(fid, X, ['uint' sprintf('%0.0f', metadata.BitDepth)], 0, 'l');
 
 	writeComment(fid, ['PIXEL_BIT_DEPTH = ' metadata.BitDepth])
 	writeComment(fid, 'PIC_FF_VERSION = 4.5')
@@ -70,9 +70,9 @@ fclose(fid);
 
 function writeComment(fid, comment)
 
-	fwrite(fid, -1, 'int16');
-	fwrite(fid, 1, 'int32');
-	fwrite(fid, [0 1 20 0 0],  'int16');
+	fwrite(fid, -1, 'int16',0,'l');
+	fwrite(fid, 1, 'int32',0,'l');
+	fwrite(fid, [0 1 20 0 0],  'int16',0,'l');
 
     % pad the comment up to 80 characters
     if numel(comment) > 80
