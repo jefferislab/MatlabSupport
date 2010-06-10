@@ -53,8 +53,8 @@ fid = fopen(filename, 'w');
 	writeComment(fid, ['PIXEL_BIT_DEPTH = ' metadata.BitDepth])
 	writeComment(fid, 'PIC_FF_VERSION = 4.5')
 
-	writeComment(fid, ['AXIS_2 001 ' sprintf('%1.4f',metadata.Origin(1)) ' ' sprintf('%1.4f', metadata.Delta(1)) ' Microns'])
-	writeComment(fid, ['AXIS_3 002 ' sprintf('%1.4f',metadata.Origin(2)) ' ' sprintf('%1.4f', metadata.Delta(2)) ' Microns'])
+	writeComment(fid, sprintf('AXIS_2 001 %1.4f %1.4f Microns',metadata.Origin(1), metadata.Delta(1)) )
+	writeComment(fid, sprintf('AXIS_3 002 %1.4f %1.4f Microns',metadata.Origin(2), metadata.Delta(2)) )
 
     if isfield(metadata, 'Note')
         for i = 1:numel(metadata.Note)
