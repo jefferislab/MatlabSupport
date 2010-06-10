@@ -7,7 +7,7 @@ if (fid < 0)
     tf = false;
 else
     fseek(fid, 54)
-    sig = fread(fid, 1, 'uint16');
+    sig = fread(fid, 1, 'uint16',0,'l');
     fclose(fid);
     tf = isequal(sig, 12345);
 end

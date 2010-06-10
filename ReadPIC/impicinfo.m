@@ -38,32 +38,32 @@ if fid ~= -1
     if endOfFile > HEADER_LEN
         % read header
         fseek(fid, 0, 'bof');
-        metadata.Width = fread(fid, 1, 'int16');
-        metadata.Height = fread(fid, 1, 'int16');
-        metadata.NumImages = fread(fid, 1, 'int16');
-        metadata.Ramp1 = fread(fid, 2, 'int16');
+        metadata.Width = fread(fid, 1, 'int16',0,'l');
+        metadata.Height = fread(fid, 1, 'int16',0,'l');
+        metadata.NumImages = fread(fid, 1, 'int16',0,'l');
+        metadata.Ramp1 = fread(fid, 2, 'int16',0,'l');
         metadata.Notes = fread(fid, 1, 'int32');
-        byteFormat = fread(fid, 1, 'int16');
-        metadata.ImageNumber = fread(fid, 1, 'int16');
+        byteFormat = fread(fid, 1, 'int16',0,'l');
+        metadata.ImageNumber = fread(fid, 1, 'int16',0,'l');
         fread(fid, 32, 'char');
-        if fread(fid, 1, 'int16')
+        if fread(fid, 1, 'int16',0,'l')
             % merged format is not currently supported
             metadata = [];
             return
         end
 
-        metadata.ColorStatus1 = fread(fid, 1, 'int16');
-        if fread(fid, 1, 'int16') ~= 12345
+        metadata.ColorStatus1 = fread(fid, 1, 'int16',0,'l');
+        if fread(fid, 1, 'int16',0,'l') ~= 12345
             metadata = [];
             return
         end
 
-        metadata.Ramp2 = fread(fid, 2, 'int16');
-        metadata.ColorStatus2 = fread(fid, 1, 'int16');
-        metadata.IsEdited = fread(fid, 1, 'int16');
-        metadata.LensMagnification = fread(fid, 1, 'int16');
-        metadata.LensFactor = fread(fid, 1, 'float32');
-        fread(fid, 3, 'int16');
+        metadata.Ramp2 = fread(fid, 2, 'int16',0,'l');
+        metadata.ColorStatus2 = fread(fid, 1, 'int16',0,'l');
+        metadata.IsEdited = fread(fid, 1, 'int16',0,'l');
+        metadata.LensMagnification = fread(fid, 1, 'int16',0,'l');
+        metadata.LensFactor = fread(fid, 1, 'float32',0,'l');
+        fread(fid, 3, 'int16',0,'l');
 
         if byteFormat == 1
             metadata.BitDepth = 8;
@@ -188,12 +188,12 @@ function note = readNote(fid,index,notesOffset)
 	NOTE_LEN    = 96;
 
     fseek(fid, notesOffset + (index - 1) * NOTE_LEN, 'bof');
-    note.level = fread(fid, 1, 'int16');
-    note.next = fread(fid, 1, 'int32');
-    note.num = fread(fid, 1, 'int16');
-    note.status = fread(fid, 1, 'int16');
-    note.type = fread(fid, 1, 'int16');
-    note.x = fread(fid, 1, 'int16');
-    note.y = fread(fid, 1, 'int16');
+    note.level = fread(fid, 1, 'int16',0,'l');
+    note.next = fread(fid, 1, 'int32',0,'l');
+    note.num = fread(fid, 1, 'int16',0,'l');
+    note.status = fread(fid, 1, 'int16',0,'l');
+    note.type = fread(fid, 1, 'int16',0,'l');
+    note.x = fread(fid, 1, 'int16',0,'l');
+    note.y = fread(fid, 1, 'int16',0,'l');
     note.text = char(fread(fid, 80, 'char')');
 end
