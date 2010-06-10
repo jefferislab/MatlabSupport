@@ -1,4 +1,9 @@
 function metadata = impicinfo(filename)
+% IMPICINFO read in the metadata from a Biorad .pic image file
+%
+% metadata = impicinfo(filename)
+% see also ispic, readpic
+
 % adapted from:
 % http://www.bu.edu/cism/cismdx/ref/dx.Samples/util/biorad-pic/PIC2dx.c
 % http://rsb.info.nih.gov/ij/plugins/download/Biorad_Reader.java
