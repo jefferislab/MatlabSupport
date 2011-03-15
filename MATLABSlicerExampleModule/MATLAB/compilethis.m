@@ -31,5 +31,7 @@
 %    c) and run this script in MATLAB 
 %    d) (Be sure to comment out the Windows stuff above):
 % INCDIR='/usr/local/include'
-mex nrrdLoadWithMetadata.c -I/usr/local/include -L/usr/local/lib/teem/ -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu -lz -lm
-mex nrrdSaveWithMetadata.c -I/usr/local/include -L/usr/local/lib/teem/ -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu -lz -lm
+% mex nrrdLoadWithMetadata.c -I/usr/local/include -L/usr/local/lib -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu -lz -lm
+% mex nrrdSaveWithMetadata.c -I/usr/local/include -L/usr/local/lib -lair -lalan -lbane -lbiff -lcoil -ldye -lecho -lell -lgage -lhest -lhoover -llimn -lmite -lmoss -lnrrd -lpush -lten -lunrrdu -lz -lm
+mex nrrdLoadWithMetadata.c -I/usr/local/include -L/usr/local/lib -lteem -lz -lm
+mex nrrdSaveWithMetadata.c -I/usr/local/include -L/usr/local/lib -lteem -lz -lm
