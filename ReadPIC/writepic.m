@@ -48,7 +48,7 @@ fid = fopen(filename, 'w');
 	fwrite(fid, [0 0 0], 'int16',0,'l');
 
 	% write image data
-	fwrite(fid, X, ['uint' sprintf('%0.0f', metadata.BitDepth)], 0, 'l');
+	fwrite(fid, X', ['uint' sprintf('%0.0f', metadata.BitDepth)], 0, 'l');
 
 	writeComment(fid, ['PIXEL_BIT_DEPTH = ' metadata.BitDepth])
 	writeComment(fid, 'PIC_FF_VERSION = 4.5')
