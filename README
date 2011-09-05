@@ -1,0 +1,26 @@
+Installation
+============
+
+  cd /path/todir/where/you/keep/code
+  git clone git://github.com/jefferis/MatlabSupport.git
+
+Now add /path/todir/where/you/keep/code/MatlabSupport to your Matlab path
+
+  http://www.mathworks.co.uk/help/techdoc/ref/path.html
+  
+Adding more packages
+====================
+
+If you want to add a new matlab package (or other code)
+
+1) make a new directory for the code (removing any version numbers)
+2) include the original license if it exists
+3) make sure that your git converts any Windows CRLF to LF on checkin. I have set the text attribute for most common source code files in .gitattributes.  
+4) git add all the files you want.
+4a) think about whether you want to add compiled mex files. The default is to ignore them and this is preferred unless they were very difficult to compile for some reason.
+5) git commit with a sensible message including version number of package
+
+License
+=======
+
+All code obviously retains the license/copyright of the original authors.
