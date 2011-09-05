@@ -1,0 +1,6 @@
+*.c,*.cpp,*.h,*.m	text
+*.asv,*.bib 	text
+*.html	text
+*.txt,*.xml	text
+*.mex*	-text
+
