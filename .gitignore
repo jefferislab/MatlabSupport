@@ -1,3 +1,6 @@
 *.o
+*.mex
 *.mexmaci
 *.mexmaci64
+*.mexglx
+*.mexw32
