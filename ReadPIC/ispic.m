@@ -6,7 +6,7 @@ fid = fopen(filename, 'r');
 if (fid < 0)
     tf = false;
 else
-    fseek(fid, 54)
+    fseek(fid, 54, 'bof');
     sig = fread(fid, 1, 'uint16',0,'l');
     fclose(fid);
     tf = isequal(sig, 12345);
