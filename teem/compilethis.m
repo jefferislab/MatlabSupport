@@ -10,21 +10,23 @@ if isunix
 	if strncmp(hostname,'hex.lmb',7) && strcmp('x86_64-unknown-linux-gnu',computer)
 		disp('Building teem library from /public/octave/teem/');
 		% special paths for LMB hex 
-		mex nrrdLoad.c -I/public/octave/teem/include -L/public/octave/teem/lib/ -lteem -lz -lm
-		mex nrrdLoadOrientation.c -I/public/octave/teem/include -L/public/octave/teem/lib/ -lteem -lz -lm
-		mex nrrdSave.c -I/public/octave/teem/include -L/public/octave/teem/lib/ -lteem -lz -lm
+		includedir='/public/octave/teem/include';
+		libdir='/public/octave/teem/lib';		
 	else
 		% default linux/mac paths
-		if length(dir('/usr/local/libx/libteem*'))==0
+		if length(dir('/usr/local/lib/libteem*'))==0
 			error(['Unable to locate teem library.' ...
 			' See MatlabSupport/teem/compilethis.m'])
 		end
 		disp('Building teem library from /usr/local');
-		mex nrrdLoad.c -I/usr/local/include -L/usr/local/lib -lteem -lz -lm
-		mex nrrdLoadOrientation.c -I/usr/local/include -L/usr/local/lib -lteem -lz -lm
-		mex nrrdSave.c -I/usr/local/include -L/usr/local/lib -lteem -lz -lm
+		includedir='/usr/local/include';
+		libdir='/usr/local/lib';
 	end
-	else
+	files=dir('*.c');
+	for i=1:length(files)
+		mex(files(i).name,['-I' includedir],['-L' libdir],'-lteem','-lz','-lm');
+	end
+else
 	disp(['don''t know how to compile on windows, but shouldn''t be too hard!' ...
 	' See MatlabSupport/teem/compilethis.m'])
 	% Details of how to build teem (the superpackage containing the nrrd library)
