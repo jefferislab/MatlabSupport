@@ -1,12 +1,15 @@
-function [headertext] = readnrrdheader(filename)
-% 	READNRRDHEADER   Read in the head of a nrrd/nhdr format file
-% 		[headertext] = readnrrdheader(filename)
+function [headertext,byteoffset] = readnrrdheader(filename)
+% READNRRDHEADER   Read in the header of a nrrd/nhdr format file
+% [headertext, byteoffset] = readnrrdheader(filename)
+% Output:
+% headertext - cell array of header lines
+% byteoffset - position of end of header (should be start of data)
 % 
-% 	Reads until the it encounters the end of file or a blank line.
-%	Does not return the blank line from a nrrd header
-% 	
-% 	Created by Gregory Jefferis on 2012-02-27.
-% 	Copyright (c)  MRC LMB. All rights reserved.
+% Reads until the it encounters the end of file or a blank line.
+% Does not return the blank line from a nrrd header
+% 
+% Created by Gregory Jefferis on 2012-02-27.
+% Copyright (c)  MRC LMB. All rights reserved.
 
 fid = fopen(filename, 'r');
 
@@ -21,5 +24,8 @@ while ~feof(fid)
 	k=k+1;
     headertext{k} = curr;
 end
+
+byteoffset = ftell(fid);
+fclose(fid);
 
 end %  function
