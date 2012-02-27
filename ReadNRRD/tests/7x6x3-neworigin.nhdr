@@ -1,0 +1,13 @@
+NRRD0004
+# Created by Nrrd_Writer at Sun Feb 26 17:53:45 GMT 2012
+type: uint8
+encoding: raw
+endian: big
+dimension: 3
+sizes: 7 6 3
+space dimension: 3
+space origin: (10,20,15)
+space directions: (0.5,0,0) (0,0.4,0) (0,0,1.0)
+space units: "microns" "microns" "microns"
+line skip: 12
+datafile: 7x6x3-origin.nrrd

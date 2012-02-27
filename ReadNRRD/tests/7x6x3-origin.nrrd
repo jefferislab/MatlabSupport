@@ -1,0 +1,13 @@
+NRRD0004
+# Created by Nrrd_Writer at Sun Feb 26 17:53:45 GMT 2012
+type: uint8
+encoding: raw
+endian: big
+dimension: 3
+sizes: 7 6 3
+space dimension: 3
+space origin: (0,0,0)
+space directions: (0.5,0,0) (0,0.4,0) (0,0,1.0)
+space units: "microns" "microns" "microns"
+
+wÙ½­¨­½ä½¢ww’¢Ó­’‚w‚’Î¨w|wwŒÓ­ww|wwä½¢www¢ÿÙ½­¨­½äw¢’Œ’¢Ówww|‚’Îwwww|ŒÓ­’‚|‚’ä½¢’Œ’¢ÿìØÅ±ŠÿìÙÅ±ŠÿìÙÅ²ŠÿìÙÅ²‹ÿìÙÅ²‹ÿìÙÅ²‹
