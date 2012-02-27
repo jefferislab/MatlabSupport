@@ -18,7 +18,7 @@ if ~nrrdtf
 end
 
 % read header
-h = readnrrdheader(filename);
+[h, offset] = readnrrdheader(filename);
 fields=[];
 % now parse header - start from line _after_ NRRD magic
 for i = 2:length(h)
@@ -51,6 +51,12 @@ metadata.dim = str2num(fields.('dimension'));
 metadata.size = str2num(fields.('sizes'));
 metadata.Width = metadata.size(1);
 metadata.Height = metadata.size(2);
+if metadata.dim>2
+	metadata.NumImages = metadata.size(3);
+else
+	metadata.NumImages = 1;
+end
+metadata.offset = offset;
 % handle space information
 metadata.Origin=[];
 metadata.Delta=[];
@@ -91,8 +97,12 @@ end
 
 
 % handle data type
-metadata.BitDepth = [];
-
+[metadata.type, metadata.BitDepth] = standard_nrrdtype(fields.type);
+if isfield(fields,'endian')
+	metadata.endian = fields.endian(1);
+else
+	metadata.endian = 'n';
+end
 metadata.ColorType = 'grayscale';
 
 fid = fopen(filename, 'r');
@@ -108,3 +118,39 @@ metadata.FileSize = d.bytes;
 
 end
 
+function [ntype, bits] = standard_nrrdtype(ntype)
+	switch(ntype)
+		case 'block'
+			bits = [];
+		case 'float'
+			bits = 32;
+		case 'double'
+			bits = 64;
+		case {'signed char', 'int8', 'int8_t'}
+			ntype = 'int8';
+			bits = 8;
+		case {'uchar', 'unsigned char', 'uint8', 'uint8_t'}
+			ntype = 'uint8';
+			bits = 8;
+		case {'short', 'short int', 'signed short', 'signed short int', 'int16', 'int16_t'}
+			ntype = 'int16';
+			bits = 16;
+		case {'ushort', 'unsigned short', 'unsigned short int', 'uint16', 'uint16_t'}
+			ntype = 'uint16';
+			bits = 16;
+		case {'int', 'signed int', 'int32', 'int32_t'}
+			ntype = 'int32';
+			bits = 32;
+		case {'uint', 'unsigned int', 'uint32', 'uint32_t'}
+			ntype = 'uint32';
+			bits = 32;
+		case {'longlong', 'long long', 'long long int', 'signed long long', 'signed long long int', 'int64', 'int64_t'}
+			ntype = 'int64';
+			bits = 64;
+		case {'ulonglong', 'unsigned long long', 'unsigned long long int', 'uint64', 'uint64_t'}
+			ntype = 'uint64';
+			bits = 64;
+		otherwise
+			error(['Invalid nrrd type: ',ntype]);
+	end
+end
