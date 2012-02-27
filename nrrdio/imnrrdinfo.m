@@ -1,6 +1,13 @@
 function [ metadata ] = imnrrdinfo( filename )
-%IMNRRDINFO parse nrrd header
-%   
+%IMNRRDINFO parse nrrd header to extract key metadata
+% [ metadata ] = imnrrdinfo( filename )
+% 
+% Note that Origin and Delta are both row vectors, following impicinfo's
+% lead
+%
+% Pure matlab implementation - currently limited to 3d images
+% See http://teem.sourceforge.net/nrrd/format.html for details of nrrd format
+% See also ISNRRD, IMFINFO
 
 [nrrdtf, nrrdversion] = isnrrd(filename);
 
@@ -67,16 +74,16 @@ if isfield(fields,'spacedimension') || isfield(fields,'space')
 	if any(trilvals(:)) || any(triuvals(:))
 		error('unable to handle off diagonal elements in space directions');
 	end
-	metadata.Delta = diag(spacedirs);
+	metadata.Delta = diag(spacedirs)';
 	if(isfield(fields,'spaceorigin'))
 		% FIXME - should really generalise to dims other than 3
-		metadata.Origin = sscanf(fields.spaceorigin,'(%f,%f,%f)');
+		metadata.Origin = sscanf(fields.spaceorigin,'(%f,%f,%f)')';
 	end
 	
 elseif isfield(fields,'spacings')
 	% deal with this
 	spacings=sscanf(fields.spacings,'%f');
-	metadata.Delta=spacings(~isnan(spacings));
+	metadata.Delta=spacings(~isnan(spacings))';
 	metadata.spacedim=length(metadata.Delta);
 else
 	% no space information
