@@ -13,9 +13,34 @@ function test_gz_nrrd
 assertEqual(metadata2.Format,'nrrd')
 assertEqual(data,data2)
 
+function test_gz_nrrd_bothways
+% cross-compare the tempfile and java approaches 
+[data,metadata] = readnrrd('4x3x2-gz.nrrd');
+[data2,metadata2] = readnrrd('4x3x2-gz.nrrd',2);
+assertEqual(metadata2.Format,'nrrd')
+assertEqual(data,data2)
+
 function test_compare_readnrrd_read3dimage
-[data,metadata] = readnrrd('4x3x2.nrrd');
-[data2,voxdims,origin] = read3dimage('4x3x2.nrrd');
-assertEqual(data,data2);
-assertEqual(metadata.Delta,voxdims);
-assertEqual(metadata.Origin,origin);
+if exist('read3dimage','file')
+	[data,metadata] = readnrrd('4x3x2.nrrd');
+	[data2,voxdims,origin] = read3dimage('4x3x2.nrrd');
+	assertEqual(data,data2);
+	assertEqual(metadata.Delta,voxdims);
+	assertEqual(metadata.Origin,origin);
+else
+	warning('unable to locate read3dimage for additional testing')
+end
+
+function test_compare_complex_read3dimage
+if exist('read3dimage','file')
+	[data,voxdims,origin] = read3dimage('image-16-gz.nrrd');
+	[data2,voxdims2,origin2] = read3dimage('image-16.PIC');
+	assertEqual(data,data2);
+	% note use of relative tolerance since one comes from string->double
+	assertAlmostEqual(voxdims,voxdims2,1e-8);
+	% read3dimage returns empty origin if not present in nrrd
+	% whereas always returns something from PIC
+	%assertAlmostEqual(origin,origin2);
+else
+	warning('unable to locate read3dimage for additional testing')
+end

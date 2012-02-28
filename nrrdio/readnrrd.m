@@ -1,4 +1,4 @@
-function [ data, info ] = readnrrd( filename)
+function [ data, info ] = readnrrd( filename, gzipmethod)
 %READNRRD Read in a nrrd image file - optionally with metadata
 %   [ data, info ] = readnrrd( filename )
 %
@@ -11,13 +11,19 @@ if ~isnrrd(filename)
 	error([filename ' is not a nrrd']);
 end
 
+if nargin<2
+	gzipmethod = 1;
+end
+
 info = imnrrdinfo(filename);
 
 if strcmp(info.nrrdfields.encoding,'raw')
 	% fine
 elseif strcmp(info.nrrdfields.encoding(1:2),'gz')
-	data = readgzipdata(info);
-	return
+	if gzipmethod==2
+		data = readgzipdata(info);
+		return
+	end
 else
 	error(['unable to open files with encoding: ',info.nrrdfields.encoding]);
 end
@@ -29,21 +35,32 @@ if fid < 0
 	error('Unable to open image file');
 end
 
+tmpfile='';
 try 
 	status = fseek(fid,info.offset,'bof');
+	if gzipmethod==1 && strcmp(info.nrrdfields.encoding(1:2),'gz')
+		tmpfile = copy_gzipdata_to_temp_file(fid);
+		fid=fopen(tmpfile,'r',info.endian);
+	end
 
 	% actually read in data (in matlab's standard form)
 	data = zeros(info.Height, info.Width, info.NumImages, info.type);
+	% note that prefixing fread data type with * returns it AS THAT TYPE
 	for x = 1:info.NumImages
-		data(:,:,x) = fread(fid, [info.Width, info.Height], info.type)';
+		data(:,:,x) = fread(fid, [info.Width, info.Height], ['*' info.type])';
 	end
 catch
 	error('Unable to read image data');
 end
 fclose(fid);
+% clean up temp file if required
+if ~isempty(tmpfile)
+	delete(tmpfile);
+end
 end
 
 function [data] = readgzipdata(ni)
+	% this works BUT is very, very slow for large files
 	f=java.io.File(ni.Filename);
 	if ~f.canRead()
 		error(['unable to open ' filename 'for reading']);
@@ -81,4 +98,26 @@ function [data] = readgzipdata(ni)
 		data(:,:,h)=plane;
 	end
 	fis.close();
+end
+
+function [tmpfile] = copy_gzipdata_to_temp_file(fid,bufsize)
+  % nb bufsize = inf => read file in one go, defaults to 1e6 bytes
+	% this time, we are going to try copying the data to a temporary file and
+	% then reading that in.
+	% assume that we are given a fid ready to go
+	if nargin<2
+		bufsize=1e6;
+	end
+	tmpfile = tempname;
+	fod = fopen([tmpfile '.gz'],'w');
+	while ~feof(fid)
+		% read in up to buf bytes
+		[buf,count] = fread(fid,bufsize,'*uint8');
+		fwrite(fod,buf(1:count),'uint8');
+	end
+	fclose(fod);
+	fclose(fid);
+	% now that we've finished copying, clean up temporary files
+	gunzip([tmpfile '.gz']);
+	delete([tmpfile '.gz']);
 end
