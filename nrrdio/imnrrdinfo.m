@@ -64,9 +64,10 @@ metadata.spacedim=metadata.dim;
 if isfield(fields,'spacedimension') || isfield(fields,'space')
 	% don't know how to deal with space field
 	if isfield(fields,'space')
-		error('Do not know how to parse space field');
+		metadata.spacedim = spacedim_for_space(fields.space);
+	else
+		metadata.spacedim=str2num(fields.spacedimension);
 	end
-	metadata.spacedim=str2num(fields.spacedimension);
 	if ~metadata.spacedim==3
 		error('Can only handle 3d data');
 	end
@@ -153,4 +154,58 @@ function [ntype, bits] = standard_nrrdtype(ntype)
 		otherwise
 			error(['Invalid nrrd type: ',ntype]);
 	end
+end
+
+function [spacedim, handedness, axisnames] = spacedim_for_space(space)
+handedness='';
+switch(space)
+	case {'right-anterior-superior','RAS'}
+		spacedim = 3;
+		handedness = 'R';
+		axisnames='RAS';
+	case {'left-anterior-superior','LAS'}
+		spacedim = 3;
+		handedness = 'L';
+		axisnames='LAS';
+	case {'left-posterior-superior','LPS'}
+		spacedim = 3;
+		handedness = 'L';
+		axisnames='LPS';
+	case {'right-anterior-superior-time','RAST'}
+		spacedim = 4;
+		handedness = 'R';
+		axisnames='RAST';
+	case {'left-anterior-superior-time','LAST'}
+		spacedim = 4;
+		handedness = 'L';
+		axisnames='LAST';
+	case {'left-posterior-superior-time','LPST'}
+		spacedim = 4;
+		handedness = 'L';
+		axisnames='LPST';
+	case {'scanner-xyz'}
+		spacedim = 3;
+		axisnames='XYZ';
+	case {'scanner-xyz-time'}
+		spacedim = 4;
+		axisnames='XYZT';
+	case {'3D-right-handed'}
+		spacedim = 3;
+		handedness = 'R';
+		axisnames='XYZ';
+	case {'3D-left-handed'}
+		spacedim = 3;
+		handedness = 'L';
+		axisnames='XYZ';
+	case {'3D-right-handed-time'}
+		spacedim = 4;
+		handedness = 'R';
+		axisnames='XYZT';
+	case {'3D-left-handed-time'}
+		spacedim = 4;
+		handedness = 'L';
+		axisnames='XYZT';
+	otherwise
+		error(['Invalid nrrd space: ' space]);
+end
 end
