@@ -2,10 +2,15 @@ function [ data, info ] = readnrrd( filename, gzipmethod)
 %READNRRD Read in a nrrd image file - optionally with metadata
 %   [ data, info ] = readnrrd( filename )
 %
-% data     - image data in matlab's default format suitable for imshow
+% data - image data in matlab's default format suitable for imshow
 % info - metadata from imnrrdinfo
 %
-% NB this is a pure matlab implementation
+% NB this is a pure matlab implementation that currently has many 
+% restrictions including for dimensions (other than 3) and encoding (only
+% raw and gzip). For raw files, I find the speed is about 50% more than
+% using the nrrd library via mex. However for large gzip encoded files the
+% performance difference can be a factor of 5-10x since the gzip encoded
+% data must be inflated _on disk_.
 
 if ~isnrrd(filename)
 	error([filename ' is not a nrrd']);
