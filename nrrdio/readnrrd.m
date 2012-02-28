@@ -13,7 +13,7 @@ function [ data, info ] = readnrrd( filename, gzipmethod)
 % data must be inflated _on disk_.
 
 if ~isnrrd(filename)
-	error([filename ' is not a nrrd']);
+	error('readnrrd:nrrderr',[filename ' is not a nrrd']);
 end
 
 if nargin<2
@@ -30,7 +30,8 @@ elseif strcmp(info.nrrdfields.encoding(1:2),'gz')
 		return
 	end
 else
-	error(['unable to open files with encoding: ',info.nrrdfields.encoding]);
+	error('readnrrd:limitation',...
+	['unable to open files with encoding: ',info.nrrdfields.encoding]);
 end
 
 % note specifying endian-ness on opening of file
@@ -41,12 +42,13 @@ if fid < 0
 end
 
 tmpfile='';
-try 
+try
 	if isfield(info.nrrdfields,'datafile')
 		% this is a detached header
 		fclose(fid);
 		if iscellstr(info.nrrdfields.datafile)
-			error ('Currently unable to open nrrds with more than 1 data file)');
+			error ('readnrrd:limitation',...
+				'Currently unable to open nrrds with more than 1 data file)');
 		end
 		fid=fopen(info.nrrdfields.datafile,'r',info.endian);
 	end
@@ -58,7 +60,9 @@ try
 		end
 	elseif ~isfield(info.nrrdfields,'datafile')
 		% skip to end of header if this is a regular (non-detached) nrrd
-		status = fseek(fid,info.headerlen,'bof');
+		if fseek(fid,info.headerlen,'bof')<0
+			error('readnrrd:seekerr','Unable to seek to end of header');
+		end
 	end
 	
 	% copy gzipped data block to temporary file if required
@@ -71,10 +75,12 @@ try
 	if ~isempty(info.byteskip)
 		if info.byteskip == -1
 			if strcmp(info.nrrdfields.encoding(1:2),'gz')
-				error('cannot use byte skip: -1 when for compressed data');
+				error('readnrrd:nrrderr','cannot use byte skip: -1 when for compressed data');
 			end
 			% seek back data length from end of file
-			fseek(fid,prod(info.size)*(info.BitDepth/8),'eof');
+			if fseek(fid,prod(info.size)*(info.BitDepth/8),'eof')<0
+				error('readnrrd:seekerr','Unable to seek back from head of data');
+			end
 		else
 			fseek(fid,info.byteskip,'cof');
 		end
@@ -86,8 +92,13 @@ try
 	for x = 1:info.NumImages
 		data(:,:,x) = fread(fid, [info.Width, info.Height], ['*' info.type])';
 	end
-catch
-	error('Unable to read image data');
+catch ME
+	if ~strcmp(ME.identifier(1:9),'readnrrd:')
+		error('readnrrd:genericloaderror',...
+			['Unable to read image data:' ME.identifier ME.message]);
+	else
+		rethrow(ME);
+	end
 end
 fclose(fid);
 % clean up temp file if required
