@@ -111,7 +111,7 @@ function [data] = readgzipdata(ni)
 	% this works BUT is very, very slow for large files
 	f=java.io.File(ni.Filename);
 	if ~f.canRead()
-		error(['unable to open ' filename 'for reading']);
+		error(['unable to open ' ni.Filename 'for reading']);
 	end
 	
 	fis=java.io.FileInputStream(f);
