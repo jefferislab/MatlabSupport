@@ -47,7 +47,7 @@ end
 metadata.nrrdfields=fields;
 metadata.Format = 'nrrd';
 metadata.FormatVersion = nrrdversion;
-metadata.dim = str2num(fields.('dimension'));
+metadata.dim = str2double(fields.('dimension'));
 metadata.size = str2num(fields.('sizes'));
 metadata.Width = metadata.size(1);
 metadata.Height = metadata.size(2);
@@ -59,13 +59,13 @@ end
 metadata.headerlen = headerlen;
 
 if isfield(fields,'byteskip')
-	metadata.byteskip=str2num(fields.byteskip);
+	metadata.byteskip=str2double(fields.byteskip);
 else
 	metadata.byteskip=[];
 end
 
 if isfield(fields,'lineskip')
-	metadata.lineskip=str2num(fields.lineskip);
+	metadata.lineskip=str2double(fields.lineskip);
 else
 	metadata.lineskip=[];
 end
@@ -79,7 +79,7 @@ if isfield(fields,'spacedimension') || isfield(fields,'space')
 	if isfield(fields,'space')
 		metadata.spacedim = spacedim_for_space(fields.space);
 	else
-		metadata.spacedim=str2num(fields.spacedimension);
+		metadata.spacedim=str2double(fields.spacedimension);
 	end
 	if ~metadata.spacedim==3
 		error('Can only handle 3d data');

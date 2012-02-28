@@ -16,7 +16,7 @@ else
 	nmagic = fgets(fid,8);
 	fclose(fid);
 	tf = isequal(nmagic(1:7), 'NRRD000');
-	version=str2num(nmagic(8));
+	version=str2double(nmagic(8));
 end
 
 end %  function
