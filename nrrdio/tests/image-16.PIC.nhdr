@@ -1,0 +1,11 @@
+NRRD0004
+encoding: raw
+endian: little
+dimension: 3
+sizes: 35 23 11
+type: uint16
+spacings: 1.549872 1.549872 1
+units: "microns" "microns" "microns"
+byte skip: 76
+data file: image-16.PIC
+

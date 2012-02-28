@@ -7,6 +7,22 @@ function test_raw_nrrd
 [data,metadata] = readnrrd('4x3x2.nrrd');
 assertEqual(metadata.Format,'nrrd')
 
+function test_raw_nhdr
+% read data from nhdr file
+[data,metadata] = readnrrd('image-16.PIC.nhdr');
+assertEqual(metadata.Format,'nrrd')
+if exist('read3dimage','file')
+	[data2,voxdims2,origin2] = read3dimage('image-16.PIC');
+	assertEqual(data,data2);
+	% note use of relative tolerance since one comes from string->double
+	assertAlmostEqual(metadata.Delta,voxdims2,1e-6);
+	% read3dimage returns empty origin if not present in nrrd
+	% whereas always returns something from PIC
+	%assertAlmostEqual(origin,origin2);
+else
+	warning('unable to locate read3dimage for additional testing')
+end
+
 function test_gz_nrrd
 [data,metadata] = readnrrd('4x3x2.nrrd');
 [data2,metadata2] = readnrrd('4x3x2-gz.nrrd');
@@ -37,7 +53,7 @@ if exist('read3dimage','file')
 	[data2,voxdims2,origin2] = read3dimage('image-16.PIC');
 	assertEqual(data,data2);
 	% note use of relative tolerance since one comes from string->double
-	assertAlmostEqual(voxdims,voxdims2,1e-8);
+	assertAlmostEqual(voxdims,voxdims2,1e-6);
 	% read3dimage returns empty origin if not present in nrrd
 	% whereas always returns something from PIC
 	%assertAlmostEqual(origin,origin2);

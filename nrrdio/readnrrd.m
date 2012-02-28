@@ -42,12 +42,44 @@ end
 
 tmpfile='';
 try 
-	status = fseek(fid,info.offset,'bof');
+	if isfield(info.nrrdfields,'datafile')
+		% this is a detached header
+		fclose(fid);
+		if iscellstr(info.nrrdfields.datafile)
+			error ('Currently unable to open nrrds with more than 1 data file)');
+		end
+		fid=fopen(info.nrrdfields.datafile,'r',info.endian);
+	end
+	
+	%line skip if required
+	if ~isempty(info.lineskip)
+		for i = 1:info.lineskip
+			fgetl(fid);
+		end
+	elseif ~isfield(info.nrrdfields,'datafile')
+		% skip to end of header if this is a regular (non-detached) nrrd
+		status = fseek(fid,info.headerlen,'bof');
+	end
+	
+	% copy gzipped data block to temporary file if required
 	if gzipmethod==1 && strcmp(info.nrrdfields.encoding(1:2),'gz')
 		tmpfile = copy_gzipdata_to_temp_file(fid);
 		fid=fopen(tmpfile,'r',info.endian);
 	end
 
+	% byte skip if required
+	if ~isempty(info.byteskip)
+		if info.byteskip == -1
+			if strcmp(info.nrrdfields.encoding(1:2),'gz')
+				error('cannot use byte skip: -1 when for compressed data');
+			end
+			% seek back data length from end of file
+			fseek(fid,prod(info.size)*(info.BitDepth/8),'eof');
+		else
+			fseek(fid,info.byteskip,'cof');
+		end
+	end
+	
 	% actually read in data (in matlab's standard form)
 	data = zeros(info.Height, info.Width, info.NumImages, info.type);
 	% note that prefixing fread data type with * returns it AS THAT TYPE
@@ -72,7 +104,10 @@ function [data] = readgzipdata(ni)
 	end
 	
 	fis=java.io.FileInputStream(f);
-	fis.skip(ni.offset);
+	% note that we don't implement all the permutations of 
+	% skips and data files since this function is just left here 
+	% for testing purposes
+	fis.skip(ni.headerlen);
 	gzfis=java.util.zip.GZIPInputStream(fis,1000);
 	data=zeros(ni.Height,ni.Width,ni.NumImages,ni.type);
 	plane=zeros(ni.Height,ni.Width,ni.type);
