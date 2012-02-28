@@ -18,7 +18,7 @@ if ~nrrdtf
 end
 
 % read header
-[h, offset] = readnrrdheader(filename);
+[h, headerlen] = readnrrdheader(filename);
 fields=[];
 % now parse header - start from line _after_ NRRD magic
 for i = 2:length(h)
@@ -56,7 +56,20 @@ if metadata.dim>2
 else
 	metadata.NumImages = 1;
 end
-metadata.offset = offset;
+metadata.headerlen = headerlen;
+
+if isfield(fields,'byteskip')
+	metadata.byteskip=str2num(fields.byteskip);
+else
+	metadata.byteskip=[];
+end
+
+if isfield(fields,'lineskip')
+	metadata.lineskip=str2num(fields.lineskip);
+else
+	metadata.lineskip=[];
+end
+
 % handle space information
 metadata.Origin=[];
 metadata.Delta=[];
