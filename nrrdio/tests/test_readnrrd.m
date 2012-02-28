@@ -7,6 +7,12 @@ function test_raw_nrrd
 [data,metadata] = readnrrd('4x3x2.nrrd');
 assertEqual(metadata.Format,'nrrd')
 
+function test_gz_nrrd
+[data,metadata] = readnrrd('4x3x2.nrrd');
+[data2,metadata2] = readnrrd('4x3x2-gz.nrrd');
+assertEqual(metadata2.Format,'nrrd')
+assertEqual(data,data2)
+
 function test_compare_readnrrd_read3dimage
 [data,metadata] = readnrrd('4x3x2.nrrd');
 [data2,voxdims,origin] = read3dimage('4x3x2.nrrd');
