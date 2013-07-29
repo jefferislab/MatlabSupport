@@ -87,6 +87,8 @@
 //  basic includes
 //----------------------------------------------------------------------
 
+#include <cstdlib>
+#include <cstring>
 #include <cmath>			// math includes
 #include <iostream>			// I/O streams
 

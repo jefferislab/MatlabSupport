@@ -6,7 +6,7 @@ function anno = ann(data)
 %   anno = ann(pts)
 %
 % Input:
-%   pts - (d)x(N) matrix of d-dimensional veecotrs representing N points
+%   pts - (d)x(N) matrix of d-dimensional vectors representing N points
 %
 % Output:
 %   anno - object handle to be used in class' methods
